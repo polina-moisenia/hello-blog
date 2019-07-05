@@ -1,0 +1,447 @@
+swagger: "2.0"
+info:
+  description: The first blog ever
+  version: 1.0.0
+  title: hello-blog
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+  - name: posts
+    description: Access to blog posts
+  - name: comments
+    description: Access to comments
+  - name: users
+    description: Operations about user
+paths:
+  /posts:
+    get:
+      tags:
+      - posts
+      summary: Get all posts available in the blog
+      consumes:
+      - application/json
+      responses:
+        200:
+          description: List of blog posts
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/post'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+    post:
+      tags:
+      - posts
+      summary: Add a new post to the blog
+      consumes:
+      - application/json
+      parameters:
+      - in:  body
+        name:  body
+        description: Post object that needs to be added to the blog
+        required: true
+        schema:
+          $ref: '#/definitions/post'
+      responses:
+        201:
+          $ref: '#/responses/created'
+        400:
+          $ref: '#/responses/badRequest'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+    put:
+      tags:
+      - posts
+      summary: Update an existing post
+      consumes:
+      - application/json
+      parameters:
+      - in:  body
+        name:  body
+        description: Post object that needs to be updated in the blog
+        required: true
+        schema:
+          type: object
+      responses:
+        200:
+          $ref: '#/responses/ok'
+        400:
+          $ref: '#/responses/badRequest'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+  /posts/{postId}:
+    get:
+      tags:
+      - posts
+      summary: Get post by id
+      consumes:
+      - application/json
+      parameters:
+      - name: postId
+        in: path
+        required: true
+        type: string
+      responses:
+        200:
+          description: Blog post
+          schema:
+            $ref: '#/definitions/post'
+        400:
+          $ref: '#/responses/badRequest'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+    post:
+      tags:
+      - posts
+      summary: Updates a post in the blog with form data
+      consumes:
+      - application/json
+      parameters:
+      - name: postId
+        in: path
+        required: true
+        type: string
+      - in:  body
+        name:  body
+        description: Post object that needs to be added to the blog
+        required: true
+        schema:
+          $ref: '#/definitions/post'
+      responses:
+        201:
+          $ref: '#/responses/created'
+        400:
+          $ref: '#/responses/badRequest'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+    delete:
+      tags:
+      - posts
+      summary: Delete post by id
+      consumes:
+      - application/json
+      parameters:
+      - name: postId
+        in: path
+        required: true
+        type: string
+      responses:
+        200:
+          $ref: '#/responses/ok'
+        400:
+          $ref: '#/responses/badRequest'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+  /posts/{postId}/comments:
+    get:
+      tags:
+      - comments
+      summary: Get all comments available for the post
+      consumes:
+      - application/json
+      parameters:
+      - name: postId
+        in: path
+        required: true
+        type: string
+      responses:
+        200:
+          description: List of comments connected to the blog post
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/comment'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+    post:
+      tags:
+      - comments
+      summary: Add a new comment to the blog post
+      consumes:
+      - application/json
+      parameters:
+      - name: postId
+        in: path
+        required: true
+        type: string
+      - in:  body
+        name:  body
+        description: Comment object that needs to be added
+        required: true
+        schema:
+          $ref: '#/definitions/comment'
+      responses:
+        201:
+          $ref: '#/responses/created'
+        400:
+          $ref: '#/responses/badRequest'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+    put:
+      tags:
+      - comments
+      summary: Update an existing comment
+      consumes:
+      - application/json
+      parameters:
+      - name: postId
+        in: path
+        required: true
+        type: string
+      - in:  body
+        name:  body
+        description: Comment object that needs to be added
+        required: true
+        schema:
+          $ref: '#/definitions/comment'
+      responses:
+        200:
+          $ref: '#/responses/ok'
+        400:
+          $ref: '#/responses/badRequest'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+  /posts/{postId}/comments/{commentId}:
+    get:
+      tags:
+      - comments
+      summary: Get comment by comment id
+      consumes:
+      - application/json
+      parameters:
+      - name: postId
+        in: path
+        required: true
+        type: string
+      - name: commentId
+        in: path
+        required: true
+        type: string
+      responses:
+        200:
+          description: Comment
+          schema:
+            $ref: '#/definitions/comment'
+        400:
+          $ref: '#/responses/badRequest'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+    post:
+      tags:
+      - comments
+      summary: Update existing comment
+      consumes:
+      - application/json
+      parameters:
+      - name: postId
+        in: path
+        required: true
+        type: string
+      - name: commentId
+        in: path
+        required: true
+        type: string
+      - in:  body
+        name:  body
+        description: Comment object that needs to be added
+        required: true
+        schema:
+          $ref: '#/definitions/comment'
+      responses:
+        200:
+          $ref: '#/responses/ok'
+        400:
+          $ref: '#/responses/badRequest'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+    delete:
+      tags:
+      - comments
+      summary: Delete comment by id
+      consumes:
+      - application/json
+      parameters:
+      - name: postId
+        in: path
+        required: true
+        type: string
+      - name: commentId
+        in: path
+        required: true
+        type: string
+      responses:
+        200:
+          $ref: '#/responses/ok'
+        400:
+          $ref: '#/responses/badRequest'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+  /users:
+    get:
+      tags:
+      - users
+      summary: Get all users
+      consumes:
+      - application/json
+      responses:
+        200:
+          description: List of active users
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/user'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+    put:
+      tags:
+      - users
+      summary: Update user info
+      produces:
+      - application/json
+      parameters:
+      - in:  body
+        name:  body
+        description: User object for update
+        required: true
+        schema:
+          $ref: '#/definitions/user'
+      responses:
+        200:
+          $ref: '#/responses/ok'
+        400:
+          $ref: '#/responses/badRequest'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+  /users/{userId}:
+    get:
+      tags:
+      -  users
+      summary: Get user info by id
+      produces:
+      -  application/json
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        type: string
+      responses:
+        200:
+          description: User info
+          schema:
+            $ref: '#/definitions/user'
+        400:
+          $ref: '#/responses/badRequest'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+    delete:
+      tags:
+      - users
+      summary: Delete user by id
+      consumes:
+      - application/json
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        type: string
+      responses:
+        200:
+          $ref: '#/responses/ok'
+        400:
+          $ref: '#/responses/badRequest'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+definitions:
+  post:
+   type: object
+   description: Post entity
+   properties:
+    postId:
+      type: string
+    authorId:
+      type: string
+    title:
+      type: string
+    createdAt:
+      format: date-time
+      type: string
+    summary:
+      type: string
+  comment:
+   type: object
+   description: Comment entity
+   properties:
+    commentId:
+      type: string
+    postId:
+      type: string
+    authorId:
+      type: string
+    createdAt:
+      format: date-time
+      type: string
+    summary:
+      type: string
+  user:
+   type: object
+   description: User description
+   properties:
+    userId:
+      type: string
+    name:
+      type: string
+    surname:
+      type: string
+responses:
+  ok:
+    description: Ok
+  created:
+    description: Created
+  accepted:
+    description: Accepted
+  badRequest:
+    description: Bad Request
+    examples:
+      application/json:
+        - message: Payload violates Schema
+        - message: Payload Invalid
+  notFound:
+    description: When resource is not found
+  internalServerError:
+    description: Internal Server Error
