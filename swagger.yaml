@@ -425,8 +425,10 @@ definitions:
     userId:
       type: string
     name:
+      description: User name and surname
       type: string
-    surname:
+    login:
+      description: User email for logging in
       type: string
 responses:
   ok:
