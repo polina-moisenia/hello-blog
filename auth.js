@@ -1,3 +1,11 @@
+process.env.AUTH_VIEW_PHOTOS_FIELD = 'login';
+process.env.AUTH_ADD_POSTS_FIELD = 'login';
+process.env.AUTH_DELETE_POSTS_FIELD = 'login';
+
+process.env.AUTH_VIEW_PHOTOS_MATCH = "gmail.com$";
+process.env.AUTH_ADD_POSTS_MATCH = "gmail.com$";
+process.env.AUTH_DELETE_POSTS_MATCH = "[help|main]@gmail.com";
+
 class Auth {
     constructor(permisions) {
         this.permisions = permisions
@@ -10,9 +18,9 @@ class Auth {
 }
 
 const authPermisions = [
-    {rule: 'VIEW_POSTS', field: 'login', match: /\w/i}, 
-    {rule: 'ADD_POSTS', field: 'login', match: /\w/i},
-    {rule: 'DELETE_POSTS', field: 'login', match: /help|main/i}
+    {rule: 'VIEW_POSTS', field: process.env.AUTH_VIEW_PHOTOS_FIELD, match: process.env.AUTH_VIEW_PHOTOS_MATCH}, 
+    {rule: 'ADD_POSTS', field: process.env.AUTH_ADD_POSTS_FIELD, match: process.env.AUTH_ADD_POSTS_MATCH},
+    {rule: 'DELETE_POSTS', field: process.env.AUTH_DELETE_POSTS_FIELD, match: process.env.AUTH_DELETE_POSTS_MATCH}
 ];
 
 const auth = new Auth(authPermisions);
