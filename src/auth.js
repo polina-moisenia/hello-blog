@@ -1,9 +1,19 @@
+const fs = require('fs');
+const usersToCheck = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
+
+const printUsers = function(users){
+    users.forEach(user => console.log("Name - " + user.name + ", Email - " + user.login));
+}
+
+console.log('Curent blog users :');
+printUsers(usersToCheck);
+
+//Implementation
 class Auth {
     constructor(permisions) {
         this.permisions = permisions
     }
 
-    //TODO handle undefined?
     canUser(rule, user){
         const [ ruleFound ] = this.permisions.filter(permision => permision.rule === rule && user[permision.field].match(permision.match));
         return ruleFound != null;
@@ -16,18 +26,12 @@ const authPermisions = [
     {rule: 'DELETE_POSTS', field: process.env.AUTH_DELETE_POSTS_FIELD, match: process.env.AUTH_DELETE_POSTS_MATCH}
 ];
 
+//Export as module later
 const auth = new Auth(authPermisions);
 
-const fs = require('fs');
-const usersToCheck = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
+//TODO add login/logout endpoints
 
-const printUsers = function(users){
-    users.forEach(user => console.log("Name - " + user.name + ", Email - " + user.login));
-}
-
-console.log('Curent blog users :');
-printUsers(usersToCheck);
-
+//TODO move checks to unit tests
 console.log('Users that can view posts :');
 printUsers(usersToCheck.filter(user => auth.canUser('VIEW_POSTS', user)));
 

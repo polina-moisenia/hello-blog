@@ -148,6 +148,20 @@ paths:
           $ref: '#/responses/notFound'
         500:
           $ref: '#/responses/internalServerError'
+  /posts/statistics:
+    get:
+      tags:
+      - posts
+      summary: Get posts statistics
+      consumes:
+      - application/json
+      responses:
+        200:
+          description: Statistics
+          schema:
+             $ref: '#/definitions/statistics'
+        500:
+          $ref: '#/responses/internalServerError'
   /posts/{postId}/comments:
     get:
       tags:
@@ -403,6 +417,16 @@ definitions:
       type: string
     summary:
       type: string
+  statistics:
+   type: object
+   description: Posts statistics
+   properties:
+    postsPerDay:
+      type: number
+    postsPerWeek:
+      type: number
+    postsPerMonth:
+      type: number
   comment:
    type: object
    description: Comment entity
