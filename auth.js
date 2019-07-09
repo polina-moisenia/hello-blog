@@ -1,16 +1,9 @@
-process.env.AUTH_VIEW_PHOTOS_FIELD = 'login';
-process.env.AUTH_ADD_POSTS_FIELD = 'login';
-process.env.AUTH_DELETE_POSTS_FIELD = 'login';
-
-process.env.AUTH_VIEW_PHOTOS_MATCH = "gmail.com$";
-process.env.AUTH_ADD_POSTS_MATCH = "gmail.com$";
-process.env.AUTH_DELETE_POSTS_MATCH = "[help|main]@gmail.com";
-
 class Auth {
     constructor(permisions) {
         this.permisions = permisions
     }
 
+    //TODO handle undefined?
     canUser(rule, user){
         const [ ruleFound ] = this.permisions.filter(permision => permision.rule === rule && user[permision.field].match(permision.match));
         return ruleFound != null;
