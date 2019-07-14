@@ -57,28 +57,6 @@ paths:
           $ref: '#/responses/notFound'
         500:
           $ref: '#/responses/internalServerError'
-    put:
-      tags:
-      - posts
-      summary: Update an existing post
-      consumes:
-      - application/json
-      parameters:
-      - in:  body
-        name:  body
-        description: Post object that needs to be updated in the blog
-        required: true
-        schema:
-          type: object
-      responses:
-        200:
-          $ref: '#/responses/ok'
-        400:
-          $ref: '#/responses/badRequest'
-        404:
-          $ref: '#/responses/notFound'
-        500:
-          $ref: '#/responses/internalServerError'
   /posts/{postId}:
     get:
       tags:
@@ -105,7 +83,7 @@ paths:
     post:
       tags:
       - posts
-      summary: Updates a post in the blog with form data
+      summary: Update existing post by id
       consumes:
       - application/json
       parameters:
@@ -122,6 +100,32 @@ paths:
       responses:
         201:
           $ref: '#/responses/created'
+        400:
+          $ref: '#/responses/badRequest'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+    put:
+      tags:
+      - posts
+      summary: Update existing post by id
+      consumes:
+      - application/json
+      parameters:
+      - name: postId
+        in: path
+        required: true
+        type: string
+      - in:  body
+        name:  body
+        description: Post object that needs to be updated in the blog
+        required: true
+        schema:
+          type: object
+      responses:
+        200:
+          $ref: '#/responses/ok'
         400:
           $ref: '#/responses/badRequest'
         404:
@@ -211,32 +215,6 @@ paths:
           $ref: '#/responses/notFound'
         500:
           $ref: '#/responses/internalServerError'
-    put:
-      tags:
-      - comments
-      summary: Update an existing comment
-      consumes:
-      - application/json
-      parameters:
-      - name: postId
-        in: path
-        required: true
-        type: string
-      - in:  body
-        name:  body
-        description: Comment object that needs to be added
-        required: true
-        schema:
-          $ref: '#/definitions/comment'
-      responses:
-        200:
-          $ref: '#/responses/ok'
-        400:
-          $ref: '#/responses/badRequest'
-        404:
-          $ref: '#/responses/notFound'
-        500:
-          $ref: '#/responses/internalServerError'
   /posts/{postId}/comments/{commentId}:
     get:
       tags:
@@ -276,6 +254,36 @@ paths:
         required: true
         type: string
       - name: commentId
+        in: path
+        required: true
+        type: string
+      - in:  body
+        name:  body
+        description: Comment object that needs to be added
+        required: true
+        schema:
+          $ref: '#/definitions/comment'
+      responses:
+        200:
+          $ref: '#/responses/ok'
+        400:
+          $ref: '#/responses/badRequest'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+    put:
+      tags:
+      - comments
+      summary: Update existing comment
+      consumes:
+      - application/json
+      parameters:
+      - name: commentId
+        in: path
+        required: true
+        type: string
+      - name: postId
         in: path
         required: true
         type: string
@@ -336,28 +344,6 @@ paths:
           $ref: '#/responses/notFound'
         500:
           $ref: '#/responses/internalServerError'
-    put:
-      tags:
-      - users
-      summary: Update user info
-      produces:
-      - application/json
-      parameters:
-      - in:  body
-        name:  body
-        description: User object for update
-        required: true
-        schema:
-          $ref: '#/definitions/user'
-      responses:
-        200:
-          $ref: '#/responses/ok'
-        400:
-          $ref: '#/responses/badRequest'
-        404:
-          $ref: '#/responses/notFound'
-        500:
-          $ref: '#/responses/internalServerError'
   /users/{userId}:
     get:
       tags:
@@ -375,6 +361,32 @@ paths:
           description: User info
           schema:
             $ref: '#/definitions/user'
+        400:
+          $ref: '#/responses/badRequest'
+        404:
+          $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+    put:
+      tags:
+      - users
+      summary: Update user info by id
+      produces:
+      - application/json
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        type: string
+      - in:  body
+        name:  body
+        description: User object for update
+        required: true
+        schema:
+          $ref: '#/definitions/user'
+      responses:
+        200:
+          $ref: '#/responses/ok'
         400:
           $ref: '#/responses/badRequest'
         404:
