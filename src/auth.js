@@ -1,7 +1,7 @@
 const fs = require('fs');
 const usersToCheck = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
 
-const printUsers = function(users){
+const printUsers = function(users) {
     users.forEach(user => console.log(`Name - ${user.name}, Email - ${user.login}`));
 }
 
@@ -34,30 +34,27 @@ const auth = new Auth(authPermisions);
 //TODO add login/logout endpoints
 
 //TODO move checks to unit tests
-const usersView = [];
-const usersAdd = [];
-const usersDelete = [];
-
-for (i = 0; i < usersToCheck.length; i++) { 
-    const user = usersToCheck[i];
+const usersFilteredByRules = usersToCheck.reduce((result, user) => {
     if(auth.canUser('VIEW_POSTS', user)){
-        usersView.push(user);
+        result.usersView.push(user);
     }
 
     if(auth.canUser('ADD_POSTS', user)){
-        usersAdd.push(user);
+        result.usersAdd.push(user);
     }
 
     if(auth.canUser('DELETE_POSTS', user)){
-        usersDelete.push(user);
+        result.usersDelete.push(user);
     }
-}
+
+    return result;
+}, { usersView: [], usersAdd: [], usersDelete: [] });
 
 console.log('Users that can view posts :');
-printUsers(usersView);
+printUsers(usersFilteredByRules.usersView);
 
 console.log('Users that can add posts :');
-printUsers(usersAdd);
+printUsers(usersFilteredByRules.usersAdd);
 
 console.log('Users that can delete posts :');
-printUsers(usersDelete);
+printUsers(usersFilteredByRules.usersDelete);
