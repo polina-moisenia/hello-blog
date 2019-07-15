@@ -2,33 +2,22 @@ const fs = require('fs');
 const blogPosts = JSON.parse(fs.readFileSync('./data/posts.json', 'utf8'));
 
 console.log('Curent blog posts :');
-blogPosts.forEach(post => console.log("Title - " + post.title + ", created - " + post.createdAt));
-console.log('Overall number of posts = ', blogPosts.length);
+blogPosts.forEach(post => console.log(`Title - ${post.title}, created - ${post.createdAt}`));
+console.log(`Overall number of posts = ${blogPosts.length}`);
 
 //Implementation - export as module later
-const countPosts = function (posts) { 
-    let perDay = 0;
-    let perWeek = 0;
-    let perMonth = 0;
-
+const countPosts = function (posts) {
     const today = Date.now();
-
-    for (i = 0; i < posts.length; i++) { 
-        const diffTime = Math.abs(today - Date.parse(posts[i].createdAt));
+    return posts.reduce((result, item) => {
+        const diffTime = Math.abs(today - Date.parse(item.createdAt));
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-        if(diffDays <= 1){
-            perDay++;
-        }
-        if(diffDays <= 7){
-            perWeek++;            
-        }
-        if(diffDays <= 30){
-            perMonth++;            
-        }
-    }
-    
-    return {postsPerDay: perDay, postsPerWeek: perWeek, postsPerMonth: perMonth};
+        if (diffDays <= 1) { result.perDay++; }
+        if (diffDays <= 7) { result.perWeek++; }
+        if (diffDays <= 30) { result.perMonth++; }
+
+        return result;
+    }, { perDay: 0, perWeek: 0, perMonth: 0 });
 }
 
 //TODO move checks to unit tests
