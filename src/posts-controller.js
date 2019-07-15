@@ -11,12 +11,11 @@ const getPosts = function (req, res) {
 };
 
 const createPost = function (req, res) {
-  //TODO validate body, check if author exists?
   const post = req.body;
-  if (!post) res.status(400).send('Bad request');
+  //TODO rewrite validation
+  if (!post || !post.authorId || !post.title || !post.summary) res.status(400).send('Bad request');
 
   post.postId = uuid.v4();
-  //TODO check date format
   post.createdAt = new Date().toISOString();
 
   postsCollection.push(post);
@@ -34,9 +33,9 @@ const getPostById = function (req, res) {
 };
 
 const updatePost = function (req, res) {
-  //TODO validate body, check if author exists?
   const postUpdated = req.body;
-  if (!postUpdated) res.status(400).send('Bad request');
+  //TODO rewrite validation  
+  if (!postUpdated || !post.title || !post.summary) res.status(400).send('Bad request');
 
   const index = postsCollection.findIndex(post => post.postId === req.params.id);
   if (index === -1) {

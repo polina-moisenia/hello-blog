@@ -19,8 +19,8 @@ const getUserById = function (req, res) {
 
 const updateUser = function (req, res) {
   const userUpdated = req.body;
-  //TODO validate body (no id inside it, only in url + password as a string)
-  if (!userUpdated) res.status(400).send('Bad request');
+  //TODO rewrite validation
+  if (!userUpdated || !userUpdated.name || !userUpdated.login || !userUpdated.password) res.status(400).send('Bad request');
 
   //TODO how users will be created, loaded?
   const index = usersCollection.findIndex(user => user.userId === req.params.id);

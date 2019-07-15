@@ -10,9 +10,9 @@ const getCommentsByPostId = function (req, res) {
 };
 
 const createComment = function (req, res) {
-  //TODO validate body, check if post and author exist?
   const comment = req.body;
-  if (!comment) res.status(400).send('Bad request');
+  //TODO rewrite validation
+  if (!comment || !comment.summary || !comment.authorId) res.status(400).send('Bad request');
 
   comment.postId = req.postId;
   comment.commentId = uuid.v4();
@@ -29,9 +29,9 @@ const getCommentById =  function (req, res) {
 };
 
 const updateComment = function (req, res) {
-  //TODO validate body, check if post and author exist?
   const commentUpdated = req.body;
-  if (!commentUpdated) res.status(400).send('Bad request');
+  //TODO rewrite validation
+  if (!commentUpdated || !commentUpdated.summary) res.status(400).send('Bad request');
 
   const index = commentsCollection.findIndex(comment => comment.postId === req.postId && comment.commentId === req.params.id);
   if (index === -1) {
