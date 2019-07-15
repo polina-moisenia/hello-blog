@@ -187,8 +187,6 @@ paths:
           type: object
           description: Comment description
           properties:
-            postId:
-              type: string
             authorId:
               type: string
             summary:

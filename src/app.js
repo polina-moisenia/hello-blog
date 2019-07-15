@@ -7,10 +7,10 @@ const fs = require('fs');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./swagger.yaml');
-const { setCookie, deleteCookie } = require('./cookie-handler.js');
-const postsRouter = require('./posts-router.js');
-const commentsRouter = require('./comments-router.js');
-const usersRouter = require('./users-router.js');
+const { setCookie, deleteCookie, authorizeByCookie } = require('./cookie-handler.js');
+const postsController = require('./posts-controller.js');
+const commentsController = require('./comments-controller.js');
+const userController = require('./users-controller.js');
 
 var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
 
@@ -26,14 +26,29 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.post('/login', (req, res) => { setCookie(req, res); });
 app.get('/logout', (req, res) => { deleteCookie(req, res); });
 
-app.use('/posts', postsRouter);
+app.use('/posts',
+  express.Router()
+  .get('/', authorizeByCookie('VIEW_POSTS'), postsController.getPosts)
+  .post('/', authorizeByCookie('ADD_POSTS'), postsController.createPost)
+  .get('/statistics', authorizeByCookie('VIEW_POSTS'), postsController.getPostsStatistics)
+  .get('/:id', authorizeByCookie('VIEW_POSTS'), postsController.getPostById)
+  .put('/:id', authorizeByCookie('ADD_POSTS'), postsController.updatePost)
+  .delete('/:id', authorizeByCookie('DELETE_POSTS'), postsController.deletePost));
 
-app.use('/posts/:postId/comments', function (req, res, next) {
-  req.postId = req.params.postId;
-  next();
-}, commentsRouter);
+app.use('/posts/:postId/comments', function (req, res, next) { req.postId = req.params.postId; next(); },
+  express.Router()
+    .get('/', authorizeByCookie('VIEW_COMMENTS'), commentsController.getCommentsByPostId)
+    .post('/', authorizeByCookie('ADD_COMMENTS'), commentsController.createComment)
+    .get('/:id', authorizeByCookie('VIEW_COMMENTS'), commentsController.getCommentById)
+    .put('/:id', authorizeByCookie('ADD_COMMENTS'), commentsController.updateComment)
+    .delete('/:id', authorizeByCookie('DELETE_COMMENTS'), commentsController.deteleComment));
 
-app.use('/users', usersRouter);
+app.use('/users',
+  express.Router()
+    .get('/', authorizeByCookie('VIEW_USERS'), userController.getUsers)
+    .get('/:id', authorizeByCookie('VIEW_USERS'), userController.getUserById)
+    .put('/:id', authorizeByCookie('ADD_USERS'), userController.updateUser)
+    .delete('/:id', authorizeByCookie('DELETE_USERS'), userController.deleteUser));
 
 app.use(function (req, res, next) {
   res.status(404).send('Sorry, can\'t find that endpoint!');

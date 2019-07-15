@@ -45,14 +45,16 @@ const deleteCookie = function (req, res) {
 };
 
 //Middleware to check permittions
-const authorizeByCookie = function (rule, req, res, next) {
-    var cookie = req.cookies[cookieName];
-    if (cookie === undefined) {
-        res.status(401).send('User must be logged in, try /login');
-    } else {
-        const login = cookie;
-        const [userFound] = usersCollection.filter(user => user.login === login);
-        auth.canUser(rule, userFound) ? next() : res.status(401).send('No permission to procced for this user, try /login with another one');
+const authorizeByCookie = function (rule) {
+    return function (req, res, next) {
+        var cookie = req.cookies[cookieName];
+        if (cookie === undefined) {
+            res.status(401).send('User must be logged in, try /login');
+        } else {
+            const login = cookie;
+            const [userFound] = usersCollection.filter(user => user.login === login);
+            auth.canUser(rule, userFound) ? next() : res.status(401).send('No permission to procced for this user, try /login with another one');
+        }
     }
 };
 
