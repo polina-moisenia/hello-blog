@@ -2,21 +2,25 @@
 	{
 		"userId" : "ff42285e-b3ed-4608-8f66-d09c590f4b13",
 		"name" : "Main CourceHolder",
-		"login" : "main@gmail.com"
+		"login" : "main@gmail.com",
+		"password" : "$2b$12$WpXYtb9OyqrcZpeZYw.q9O0VxVbv.PCDxYYPcLwY45Z9lM9QCA7Gq"
 	},
 	{
 		"userId" : "81f48b9f-5cbe-4ae1-85fb-5f539f8b6de7",
 		"name" : "Helping Assistant",
-		"login" : "help@gmail.com"
+		"login" : "help@gmail.com",
+		"password" : "$2b$12$sveeZ9X2FPWLQQKfyAfmoujaFxzZrRpJnvZ0Oq1UMs9p2MYg9T7OW"
 	},
 	{
 		"userId" : "2f44f1a5-f876-4ecc-b85f-b39bac827cfc",
 		"name" : "Student OrdinaryFirst",
-		"login" : "student1@gmail.com"
+		"login" : "student1@gmail.com",
+		"password" : "$2b$12$jRgIi30O3jgPrD99cu6bde526/bH4KoSqLuaDYTMvfZplLTLXZ3X."
 	},
 	{
 		"userId" : "7e530f8f-0744-4281-a429-09537a79472b",
 		"name" : "Student OrdinarySecond",
-		"login" : "student2@gmail.com"
+		"login" : "student2@gmail.com",
+		"password" : "$2b$12$taC63uHFi1ESOHZ1JqMW4eNx46QDmubdv.uyciP3Tt01/wgrvIXwG"
 	}
 ]

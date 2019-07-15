@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   title: hello-blog
 schemes:
-- https
+- http
 consumes:
 - application/json
 produces:
@@ -16,6 +16,7 @@ tags:
     description: Access to comments
   - name: users
     description: Operations about user
+  - name: public    
 paths:
   /posts:
     get:
@@ -31,8 +32,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/post'
-        404:
-          $ref: '#/responses/notFound'
         500:
           $ref: '#/responses/internalServerError'
     post:
@@ -47,14 +46,20 @@ paths:
         description: Post object that needs to be added to the blog
         required: true
         schema:
-          $ref: '#/definitions/post'
+          type: object
+          description: Post entity
+          properties:
+            authorId:
+              type: string
+            title:
+              type: string
+            summary:
+              type: string
       responses:
         201:
           $ref: '#/responses/created'
         400:
           $ref: '#/responses/badRequest'
-        404:
-          $ref: '#/responses/notFound'
         500:
           $ref: '#/responses/internalServerError'
   /posts/{postId}:
@@ -74,8 +79,6 @@ paths:
           description: Blog post
           schema:
             $ref: '#/definitions/post'
-        400:
-          $ref: '#/responses/badRequest'
         404:
           $ref: '#/responses/notFound'
         500:
@@ -96,7 +99,13 @@ paths:
         description: Post object that needs to be added to the blog
         required: true
         schema:
-          $ref: '#/definitions/post'
+          type: object
+          description: Post entity
+          properties:
+            title:
+              type: string
+            summary:
+              type: string
       responses:
         201:
           $ref: '#/responses/created'
@@ -123,6 +132,12 @@ paths:
         required: true
         schema:
           type: object
+          description: Post entity
+          properties:
+            title:
+              type: string
+            summary:
+              type: string
       responses:
         200:
           $ref: '#/responses/ok'
@@ -146,8 +161,6 @@ paths:
       responses:
         200:
           $ref: '#/responses/ok'
-        400:
-          $ref: '#/responses/badRequest'
         404:
           $ref: '#/responses/notFound'
         500:
@@ -185,8 +198,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/comment'
-        404:
-          $ref: '#/responses/notFound'
         500:
           $ref: '#/responses/internalServerError'
     post:
@@ -205,14 +216,20 @@ paths:
         description: Comment object that needs to be added
         required: true
         schema:
-          $ref: '#/definitions/comment'
+          type: object
+          description: Comment description
+          properties:
+            postId:
+              type: string
+            authorId:
+              type: string
+            summary:
+              type: string
       responses:
         201:
           $ref: '#/responses/created'
         400:
           $ref: '#/responses/badRequest'
-        404:
-          $ref: '#/responses/notFound'
         500:
           $ref: '#/responses/internalServerError'
   /posts/{postId}/comments/{commentId}:
@@ -236,8 +253,6 @@ paths:
           description: Comment
           schema:
             $ref: '#/definitions/comment'
-        400:
-          $ref: '#/responses/badRequest'
         404:
           $ref: '#/responses/notFound'
         500:
@@ -262,7 +277,11 @@ paths:
         description: Comment object that needs to be added
         required: true
         schema:
-          $ref: '#/definitions/comment'
+          type: object
+          description: Comment fields to update
+          properties:
+            summary:
+              type: string
       responses:
         200:
           $ref: '#/responses/ok'
@@ -289,10 +308,14 @@ paths:
         type: string
       - in:  body
         name:  body
-        description: Comment object that needs to be added
+        description: Comment object that needs to be updated
         required: true
         schema:
-          $ref: '#/definitions/comment'
+          type: object
+          description: Comment fields to update
+          properties:
+            summary:
+              type: string
       responses:
         200:
           $ref: '#/responses/ok'
@@ -320,8 +343,6 @@ paths:
       responses:
         200:
           $ref: '#/responses/ok'
-        400:
-          $ref: '#/responses/badRequest'
         404:
           $ref: '#/responses/notFound'
         500:
@@ -340,8 +361,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/user'
-        404:
-          $ref: '#/responses/notFound'
         500:
           $ref: '#/responses/internalServerError'
   /users/{userId}:
@@ -361,8 +380,6 @@ paths:
           description: User info
           schema:
             $ref: '#/definitions/user'
-        400:
-          $ref: '#/responses/badRequest'
         404:
           $ref: '#/responses/notFound'
         500:
@@ -383,7 +400,17 @@ paths:
         description: User object for update
         required: true
         schema:
-          $ref: '#/definitions/user'
+          type: object
+          description: User description
+          properties:
+            name:
+              description: User name and surname
+              type: string
+            login:
+              description: User email for logging in
+              type: string
+            password:
+              type: string
       responses:
         200:
           $ref: '#/responses/ok'
@@ -407,10 +434,49 @@ paths:
       responses:
         200:
           $ref: '#/responses/ok'
-        400:
-          $ref: '#/responses/badRequest'
         404:
           $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/internalServerError'
+  /login:
+    post:
+      tags:
+      - public
+      summary: User must be logged in to use the services
+      consumes:
+      - application/json
+      parameters:
+      - in:  body
+        name:  body
+        description: User object for update
+        required: true
+        schema:
+          type: object
+          properties:
+            login:
+              type: string
+              description: Email for logging in, must already exist in the Users list
+            password:
+              type: string
+      responses:
+        200:
+          $ref: '#/responses/ok'
+        400:
+          $ref: '#/responses/badRequest'
+        401:
+          description: Unauthorized
+        500:
+          $ref: '#/responses/internalServerError'
+  /logout:
+    get:
+      tags:
+      - public
+      summary: User can logout
+      consumes:
+      - application/json
+      responses:
+        200:
+          $ref: '#/responses/ok'
         500:
           $ref: '#/responses/internalServerError'
 definitions:
@@ -465,6 +531,8 @@ definitions:
       type: string
     login:
       description: User email for logging in
+      type: string
+    password:
       type: string
 responses:
   ok:
