@@ -32,25 +32,6 @@ commentsRouter.get('/:id', function (req, res, next) { authorizeByCookie('VIEW_C
   comment ? res.json(comment) : res.status(404).send('Comment was not found');
 });
 
-commentsRouter.post('/:id', function (req, res, next) { authorizeByCookie('ADD_COMMENTS', req, res, next) }, function (req, res) {
-  //TODO validate body
-  const commentUpdated = req.body;
-  if (!commentUpdated) res.status(400).send('Bad request');
-
-  const index = commentsCollection.findIndex(comment => comment.postId === req.postId && comment.commentId === req.params.id);
-  if (index === -1) {
-    res.status(404).send('Comment was not found');
-  } else {    
-    //TODO add modified field to the schema if needed
-    commentFound = commentsCollection[index];
-    commentFound.summary = commentUpdated.summary;
-
-    commentsCollection[index] = commentFound;
-    fs.writeFileSync(commentsDataLocation, JSON.stringify(commentsCollection));
-    res.status(200).send(`Comment ${commentFound.commentId} was updated`);
-  }
-});
-
 commentsRouter.put('/:id', function (req, res, next) { authorizeByCookie('ADD_COMMENTS', req, res, next) }, function (req, res) {
   //TODO understand what woud be the diff between post by id - can I create comment here?
   //TODO validate body, check if post and author exist?

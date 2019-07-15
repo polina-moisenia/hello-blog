@@ -26,7 +26,7 @@ usersRouter.put('/:id', function (req, res, next) { authorizeByCookie('ADD_USERS
   //TODO validate body (no id inside it, only in url + password as a string)
   if (!userUpdated) res.status(400).send('Bad request');
 
-  //TODO can I create user here?
+  //TODO how users will be created, loaded?
   const index = usersCollection.findIndex(user => user.userId === req.params.id);
   if (index === -1) {
     res.status(404).send('User was not found');

@@ -37,26 +37,6 @@ postsRouter.get('/:id', function (req, res, next) { authorizeByCookie('VIEW_POST
   post ? res.json(post) : res.status(404).send('Post was not found');
 });
 
-postsRouter.post('/:id', function (req, res, next) { authorizeByCookie('ADD_POSTS', req, res, next) }, function (req, res) {
-  //TODO validate body, check if author exists?
-  const postUpdated = req.body;
-  if (!postUpdated) res.status(400).send('Bad request');
-
-  const index = postsCollection.findIndex(post => post.postId === req.params.id);
-  if (index === -1) {
-    res.status(404).send('Post was not found');
-  } else {
-    //TODO add modified field to the schema if needed
-    postFound = postsCollection[index];
-    postFound.title = postUpdated.title;
-    postFound.summary = postUpdated.summary;
-
-    postsCollection[index] = postFound;
-    fs.writeFileSync(postsDataLocation, JSON.stringify(postsCollection));
-    res.status(200).send(`Post ${postFound.postId} was updated`);
-  }
-});
-
 postsRouter.put('/:id', function (req, res, next) { authorizeByCookie('ADD_POSTS', req, res, next) }, function (req, res) {
   //TODO understand what woud be the diff between post by id - can I create post here?
   //TODO validate body, check if author exists?

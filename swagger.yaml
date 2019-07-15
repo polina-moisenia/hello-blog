@@ -83,38 +83,6 @@ paths:
           $ref: '#/responses/notFound'
         500:
           $ref: '#/responses/internalServerError'
-    post:
-      tags:
-      - posts
-      summary: Update existing post by id
-      consumes:
-      - application/json
-      parameters:
-      - name: postId
-        in: path
-        required: true
-        type: string
-      - in:  body
-        name:  body
-        description: Post object that needs to be added to the blog
-        required: true
-        schema:
-          type: object
-          description: Post entity
-          properties:
-            title:
-              type: string
-            summary:
-              type: string
-      responses:
-        201:
-          $ref: '#/responses/created'
-        400:
-          $ref: '#/responses/badRequest'
-        404:
-          $ref: '#/responses/notFound'
-        500:
-          $ref: '#/responses/internalServerError'
     put:
       tags:
       - posts
@@ -253,40 +221,6 @@ paths:
           description: Comment
           schema:
             $ref: '#/definitions/comment'
-        404:
-          $ref: '#/responses/notFound'
-        500:
-          $ref: '#/responses/internalServerError'
-    post:
-      tags:
-      - comments
-      summary: Update existing comment
-      consumes:
-      - application/json
-      parameters:
-      - name: postId
-        in: path
-        required: true
-        type: string
-      - name: commentId
-        in: path
-        required: true
-        type: string
-      - in:  body
-        name:  body
-        description: Comment object that needs to be added
-        required: true
-        schema:
-          type: object
-          description: Comment fields to update
-          properties:
-            summary:
-              type: string
-      responses:
-        200:
-          $ref: '#/responses/ok'
-        400:
-          $ref: '#/responses/badRequest'
         404:
           $ref: '#/responses/notFound'
         500:
