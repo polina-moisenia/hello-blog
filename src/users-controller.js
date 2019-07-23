@@ -7,13 +7,11 @@ const usersDataLocation = path.join(__dirname, '../data/users.json');
 const usersCollection = JSON.parse(fs.readFileSync(usersDataLocation, 'utf8'));
 
 const getUsers = function (req, res) {
-  //TODO hide password hashes
-  res.json(usersCollection);
+  res.json(usersCollection.map(({password, ...user}) => user));
 }
 
 const getUserById = function (req, res) {
-  const [user] = usersCollection.filter(user => user.userId === req.params.id);
-  //TODO hide password hash
+  const [user] = usersCollection.filter(user => user.userId === req.params.id).map(({password, ...user}) => user);
   user ? res.json(user) : res.status(404).send('User was not found');
 };
 

@@ -391,8 +391,8 @@ paths:
             password:
               type: string
       responses:
-        200:
-          $ref: '#/responses/ok'
+        302:
+          description: Redirect on successful log in
         400:
           $ref: '#/responses/badRequest'
         401:
@@ -409,6 +409,8 @@ paths:
       responses:
         200:
           $ref: '#/responses/ok'
+        403:
+          description: Forbidden 
         500:
           $ref: '#/responses/internalServerError'
 definitions:

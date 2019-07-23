@@ -6,13 +6,13 @@ const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
-const swaggerDocument = YAML.load('./swagger.yaml');
-const { setCookie, deleteCookie, authorizeByCookie } = require('./cookie-handler.js');
-const postsController = require('./posts-controller.js');
-const commentsController = require('./comments-controller.js');
-const userController = require('./users-controller.js');
+const swaggerDocument = YAML.load(path.join(__dirname, '../swagger.yaml'));
+const { setCookie, deleteCookie, authorizeByCookie } = require(path.join(__dirname, 'cookie-handler.js'));
+const postsController = require(path.join(__dirname, 'posts-controller.js'));
+const commentsController = require(path.join(__dirname, 'comments-controller.js'));
+const userController = require(path.join(__dirname, 'users-controller.js'));
 
-var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
 
 app = express();
 

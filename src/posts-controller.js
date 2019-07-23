@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid');
-const statistics = require('./statistics.js');
+const statistics = require(path.join(__dirname, 'statistics.js'));
 
 const postsDataLocation = path.join(__dirname, '../data/posts.json');
 const postsCollection = JSON.parse(fs.readFileSync(postsDataLocation, 'utf8'));
