@@ -1,9 +1,9 @@
 const fs = require('fs');
 const bcrypt = require('bcrypt');
 const path = require('path');
-const auth = require(path.join(__dirname, 'auth.js'));
-
-const usersCollection = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/users.json'), 'utf8'));
+const auth = require(path.join(__dirname, '../utils/auth.js'));
+const { usersDataLocation } = require('../config.js');
+const usersCollection = JSON.parse(fs.readFileSync(usersDataLocation, 'utf8'));
 const cookieName = 'logged-in';
 
 //Login

@@ -1,9 +1,7 @@
 const fs = require('fs');
-const path = require('path');
 const uuid = require('uuid');
-const statistics = require(path.join(__dirname, 'statistics.js'));
-
-const postsDataLocation = path.join(__dirname, '../data/posts.json');
+const path = require('path');
+const { postsDataLocation } = require('../config.js');
 const postsCollection = JSON.parse(fs.readFileSync(postsDataLocation, 'utf8'));
 
 const getPosts = function (req, res) {
@@ -21,10 +19,6 @@ const createPost = function (req, res) {
   postsCollection.push(post);
   fs.writeFileSync(postsDataLocation, JSON.stringify(postsCollection));
   res.status(201).send(`Post was created, id = ${post.postId}`);
-};
-
-const getPostsStatistics = function (req, res) {
-  res.send(statistics(postsCollection));
 };
 
 const getPostById = function (req, res) {
@@ -65,7 +59,6 @@ const deletePost = function (req, res) {
 
 module.exports = {
   getPosts,
-  getPostsStatistics,
   getPostById,
   createPost,
   updatePost,

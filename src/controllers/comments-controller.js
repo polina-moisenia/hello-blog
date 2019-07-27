@@ -1,8 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid');
-
-const commentsDataLocation = path.join(__dirname, '../data/comments.json');
+const { commentsDataLocation } = require('../config.js');
 const commentsCollection = JSON.parse(fs.readFileSync(commentsDataLocation, 'utf8'));
 
 const getCommentsByPostId = function (req, res) {

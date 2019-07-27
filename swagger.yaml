@@ -292,14 +292,23 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/user'
+              type: object
+              properties:
+                userId:
+                  type: string
+                name:
+                  description: User name and surname
+                  type: string
+                login:
+                  description: User email for logging in
+                  type: string
         500:
           $ref: '#/responses/internalServerError'
   /users/{userId}:
     get:
       tags:
       -  users
-      summary: Get user info by id
+      summary: Get user info and gravatar profile by id
       produces:
       -  application/json
       parameters:
@@ -309,9 +318,20 @@ paths:
         type: string
       responses:
         200:
-          description: User info
+          description: User info with gravatar profile
           schema:
-            $ref: '#/definitions/user'
+            type: object
+            properties:
+              userId:
+                type: string
+              name:
+                description: User name and surname
+                type: string
+              login:
+                description: User email for logging in
+                type: string
+              gravatarProfile:
+                type: object
         404:
           $ref: '#/responses/notFound'
         500:

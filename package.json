@@ -4,7 +4,7 @@
   "description": "",
   "npm": "app.js",
   "scripts": {
-    "start": "npx nodemon ./src/app.js",
+    "start": "npx nodemon --experimental-worker ./src/app.js",
     "set-vars": "set-vars.bat",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,8 +21,11 @@
   "dependencies": {
     "bcrypt": "^3.0.6",
     "cookie-parser": "^1.4.4",
+    "cron": "^1.7.1",
     "express": "^4.17.1",
+    "md5": "^2.2.1",
     "morgan": "^1.9.1",
+    "node-fetch": "^2.6.0",
     "swagger-ui-express": "^4.0.7",
     "uuid": "^3.3.2",
     "yamljs": "^0.3.0"
