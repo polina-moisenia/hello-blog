@@ -1,17 +1,13 @@
 const fs = require('fs');
-const path = require('path');
+const httpStatus = require('http-status');
 const bcrypt = require('bcrypt');
-const cron = require('cron');
 const { usersDataLocation } = require('../config.js');
 const { getGravatarProfile } = require('../utils/gravatar-loader.js');
 const saltRounds = 10;
 const usersCollection = JSON.parse(fs.readFileSync(usersDataLocation, 'utf8'));
 
 const getUsers = function (req, res) {
-  res.json(usersCollection.map(({ password, ...user }) => {
-    //user.avatarUrl = getAvatarURL(user.login);
-    return user;
-  }));
+  res.json(usersCollection.map(({ password, ...user }) => user));
 }
 
 const getUserById = async function (req, res) {
@@ -20,19 +16,19 @@ const getUserById = async function (req, res) {
     user.gravatarProfile = await getGravatarProfile(user.login);
     res.json(user);
   } else {
-    res.status(404).send('User was not found');
+    res.status(httpStatus.NOT_FOUND).send('User was not found');
   }
 };
 
 const updateUser = function (req, res) {
   const userUpdated = req.body;
   //TODO rewrite validation
-  if (!userUpdated || !userUpdated.name || !userUpdated.login || !userUpdated.password) res.status(400).send('Bad request');
+  if (!userUpdated || !userUpdated.name || !userUpdated.login || !userUpdated.password) res.status(httpStatus.BAD_REQUEST).send('Bad request');
 
   //TODO how users will be created, loaded?
   const index = usersCollection.findIndex(user => user.userId === req.params.id);
   if (index === -1) {
-    res.status(404).send('User was not found');
+    res.status(httpStatus.NOT_FOUND).send('User was not found');
   } else {
     userFound = usersCollection[index];
     userFound.name = userUpdated.name;
@@ -42,18 +38,18 @@ const updateUser = function (req, res) {
     usersCollection[index] = userFound;
     fs.writeFileSync(usersDataLocation, JSON.stringify(usersCollection));
 
-    res.status(200).send(`User ${userFound.userId} was updated`);
+    res.status(httpStatus.OK).send(`User ${userFound.userId} was updated`);
   }
 }
 
 const deleteUser = function (req, res) {
   const index = usersCollection.findIndex(user => user.userId === req.params.id);
   if (index === -1) {
-    res.status(404).send('User was not found');
+    res.status(httpStatus.NOT_FOUND).send('User was not found');
   } else {
     usersCollection.splice(index, 1);
     fs.writeFileSync(usersDataLocation, JSON.stringify(usersCollection));
-    res.status(200).send('User was deleted');
+    res.status(httpStatus.OK).send('User was deleted');
   }
 };
 
