@@ -1,9 +1,8 @@
 const fs = require('fs');
 const httpStatus = require('http-status');
-const bcrypt = require('bcrypt');
-const { usersDataLocation } = require('../config.js');
+const crypto = require('crypto');
+const { usersDataLocation, saltRounds, hashAlg } = require('../config.js');
 const { getGravatarProfile } = require('../utils/gravatar-loader.js');
-const saltRounds = 10;
 const usersCollection = JSON.parse(fs.readFileSync(usersDataLocation, 'utf8'));
 
 const getUsers = function (req, res) {
@@ -33,7 +32,7 @@ const updateUser = function (req, res) {
     userFound = usersCollection[index];
     userFound.name = userUpdated.name;
     userFound.login = userUpdated.login;
-    userFound.password = bcrypt.hashSync(userUpdated.password, saltRounds);
+    userFound.password = crypto.pbkdf2Sync(userUpdated.password, saltRounds, 1000, 64, hashAlg).toString(`hex`);
 
     usersCollection[index] = userFound;
     fs.writeFileSync(usersDataLocation, JSON.stringify(usersCollection));

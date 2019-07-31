@@ -4,7 +4,7 @@
   "description": "",
   "npm": "app.js",
   "scripts": {
-    "start": "npx nodemon --experimental-worker ./src/app.js",
+    "start": "npx nodemon ./src/app.js",
     "set-vars": "set-vars.bat",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,9 +19,9 @@
   },
   "homepage": "https://github.com/polina-moisenia/hello-blog#readme",
   "dependencies": {
-    "bcrypt": "^3.0.6",
     "cookie-parser": "^1.4.4",
     "cron": "^1.7.1",
+    "crypto": "^1.0.1",
     "express": "^4.17.1",
     "http-status": "^1.3.2",
     "md5": "^2.2.1",

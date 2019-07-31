@@ -1,9 +1,9 @@
 const fs = require('fs');
-const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const path = require('path');
 const httpStatus = require('http-status');
 const auth = require(path.join(__dirname, '../utils/auth.js'));
-const { usersDataLocation } = require('../config.js');
+const { usersDataLocation, saltRounds, hashAlg } = require('../config.js');
 const usersCollection = JSON.parse(fs.readFileSync(usersDataLocation, 'utf8'));
 const cookieName = 'logged-in';
 
@@ -32,7 +32,7 @@ const setCookie = function (req, res) {
 };
 
 const checkPasswordForUser = function (user, password) {
-    return bcrypt.compareSync(password, user.password);
+    return user.password === crypto.pbkdf2Sync(password, saltRounds, 1000, 64, hashAlg).toString(`hex`);
 }
 
 //Logout
