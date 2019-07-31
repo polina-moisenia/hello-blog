@@ -1,6 +1,7 @@
 const fs = require('fs');
 const httpStatus = require('http-status');
 const crypto = require('crypto');
+const User = require('../models/User.js');
 const { usersDataLocation, saltRounds, hashAlg } = require('../config.js');
 const { getGravatarProfile } = require('../utils/gravatar-loader.js');
 const usersCollection = JSON.parse(fs.readFileSync(usersDataLocation, 'utf8'));
@@ -10,7 +11,16 @@ const getUsers = function (req, res) {
 }
 
 const getUserById = async function (req, res) {
-  const [user] = usersCollection.filter(user => user.userId === req.params.id).map(({ password, ...user }) => user);
+  const user = await User.findOne({ userId: req.params.id }, function (err, user) {
+    if (err) return console.log(err);
+    return user;
+  });
+
+  //({ password, _id, ...userFound }) => userFound
+  console.log(user);
+  //TODO handle promise
+  //.catch(error => console.log(error.stack))
+  
   if (user) {
     user.gravatarProfile = await getGravatarProfile(user.login);
     res.json(user);

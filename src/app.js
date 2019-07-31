@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
+const connectMongoDB = require ("./utils/mongo-connection.js");
 const swaggerDocument = YAML.load(path.join(__dirname, '../swagger.yaml'));
 const { setCookie, deleteCookie, authorizeByCookie } = require(path.join(__dirname, './controllers/cookie-controller.js'));
 const postsController = require(path.join(__dirname, './controllers/posts-controller.js'));
@@ -14,6 +15,7 @@ const userController = require(path.join(__dirname, './controllers/users-control
 const statisticsController = require(path.join(__dirname, './controllers/statistics-controller.js'));
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
+connectMongoDB();
 
 app = express();
 
@@ -29,12 +31,12 @@ app.get('/logout', (req, res) => { deleteCookie(req, res); });
 
 app.use('/posts',
   express.Router()
-  .get('/', authorizeByCookie('VIEW_POSTS'), postsController.getPosts)
-  .post('/', authorizeByCookie('ADD_POSTS'), postsController.createPost)
-  .get('/statistics', authorizeByCookie('VIEW_POSTS'), statisticsController.getPostsStatistics)
-  .get('/:id', authorizeByCookie('VIEW_POSTS'), postsController.getPostById)
-  .put('/:id', authorizeByCookie('ADD_POSTS'), postsController.updatePost)
-  .delete('/:id', authorizeByCookie('DELETE_POSTS'), postsController.deletePost));
+    .get('/', authorizeByCookie('VIEW_POSTS'), postsController.getPosts)
+    .post('/', authorizeByCookie('ADD_POSTS'), postsController.createPost)
+    .get('/statistics', authorizeByCookie('VIEW_POSTS'), statisticsController.getPostsStatistics)
+    .get('/:id', authorizeByCookie('VIEW_POSTS'), postsController.getPostById)
+    .put('/:id', authorizeByCookie('ADD_POSTS'), postsController.updatePost)
+    .delete('/:id', authorizeByCookie('DELETE_POSTS'), postsController.deletePost));
 
 app.use('/posts/:postId/comments', function (req, res, next) { req.postId = req.params.postId; next(); },
   express.Router()
