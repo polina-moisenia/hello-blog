@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const db = "mongodb+srv://admin:admin@blog-cluster-tfscs.mongodb.net/blog"
+const db = require('../config.js').usersDB;
 
 const connectMongoDB = function () {
     mongoose

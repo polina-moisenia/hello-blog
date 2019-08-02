@@ -1,16 +1,12 @@
-const fs = require('fs');
 const crypto = require('crypto');
-const path = require('path');
 const httpStatus = require('http-status');
-const auth = require(path.join(__dirname, '../utils/auth.js'));
-const { usersDataLocation, saltRounds, hashAlg } = require('../config.js');
-const usersCollection = JSON.parse(fs.readFileSync(usersDataLocation, 'utf8'));
-const cookieName = 'logged-in';
+const { saltRounds, hashAlg, cookieName } = require('../config.js');
+const User = require('../models/User.js');
 
 //Login
 const setCookie = function (req, res) {
     const cookie = req.cookies[cookieName];
-    if(cookie){
+    if (cookie) {
         res.status(httpStatus.PERMANENT_REDIRECT).redirect('/posts');
     } else {
         const login = req.body.login;
@@ -19,15 +15,17 @@ const setCookie = function (req, res) {
             res.status(httpStatus.BAD_REQUEST).send('Login and password requiried');
         }
 
-        const [userFound] = usersCollection.filter(user => user.login === login);
-        if (!userFound) {
-            res.status(httpStatus.UNAUTHORIZED).send('Wrong user, try /login again');
-        } else if (!checkPasswordForUser(userFound, password)) {
-            res.status(httpStatus.UNAUTHORIZED).send('Wrong password, try /login again');
-        } else {
-            res.cookie(cookieName, login);
-            res.status(httpStatus.PERMANENT_REDIRECT).redirect('/posts');
-        }
+        User.findOne({ login: login }, function (err, doc) {
+            if (!doc) {
+                res.status(httpStatus.UNAUTHORIZED).send('Wrong user, try /login again');
+            } else if (!checkPasswordForUser(doc, password)) {
+                res.status(httpStatus.UNAUTHORIZED).send('Wrong password, try /login again');
+            } else {
+                res.cookie(cookieName, login);
+                res.status(httpStatus.PERMANENT_REDIRECT).redirect('/posts');
+            }
+        });
+
     }
 };
 
@@ -38,7 +36,7 @@ const checkPasswordForUser = function (user, password) {
 //Logout
 const deleteCookie = function (req, res) {
     const cookie = req.cookies[cookieName];
-    if(cookie) {
+    if (cookie) {
         res.clearCookie(cookieName);
         res.status(httpStatus.OK).send('Logged out');
     } else {
@@ -46,22 +44,7 @@ const deleteCookie = function (req, res) {
     }
 };
 
-//Middleware to check permittions
-const authorizeByCookie = function (rule) {
-    return function (req, res, next) {
-        const cookie = req.cookies[cookieName];
-        if(cookie){
-            const login = cookie;
-            const [userFound] = usersCollection.filter(user => user.login === login);
-            auth.canUser(rule, userFound) ? next() : res.status(401).send('No permission to procced for this user, try /login with another one');
-        } else{
-            res.status(httpStatus.UNAUTHORIZED).send('User must be logged in, try /login');
-        }
-    }
-};
-
 module.exports = {
     setCookie,
-    deleteCookie,
-    authorizeByCookie
+    deleteCookie
 };

@@ -4,16 +4,19 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema(
     {
         userId: {
-            type: String,
+            type: String
         },
         name: {
-            type: String,
+            type: String
         },
         login: {
-            type: String,
+            type: String
         },
         password: {
-            type: String,
+            type: String
+        },
+        gravatarProfile: {
+            type: Object
         }
     }
 );
