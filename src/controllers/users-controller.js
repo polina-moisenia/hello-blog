@@ -1,9 +1,5 @@
-const fs = require('fs');
 const httpStatus = require('http-status');
-const crypto = require('crypto');
 const User = require('../models/User.js');
-//TODO move to env vars - salt and hash
-const { saltRounds, hashAlg } = require('../config.js');
 const { getGravatarProfile } = require('../utils/gravatar-loader.js');
 
 const getUsers = function (req, res) {
@@ -38,7 +34,7 @@ const updateUser = function (req, res) {
 
     doc.name = userUpdated.name;
     doc.login = userUpdated.login;
-    doc.password = crypto.pbkdf2Sync(userUpdated.password, saltRounds, 1000, 64, hashAlg).toString(`hex`);
+    doc.setPassword(userUpdated.password);
     doc.save();
 
     return res.status(httpStatus.OK).send(`User ${doc.userId} was updated`);

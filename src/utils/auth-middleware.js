@@ -1,7 +1,8 @@
 const path = require('path');
+const httpStatus= require('http-status');
 const User = require('../models/User.js');
 const auth = require(path.join(__dirname, '../utils/auth.js'));
-const { cookieName } = require('../config.js');
+const cookieName = require('../config.js').cookieName;
 
 //Middleware to check permittions
 const authorizeByCookie = function (rule) {

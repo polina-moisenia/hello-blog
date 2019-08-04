@@ -1,7 +1,6 @@
-const crypto = require('crypto');
 const httpStatus = require('http-status');
-const { saltRounds, hashAlg, cookieName } = require('../config.js');
 const User = require('../models/User.js');
+const cookieName = process.env.cookieName;
 
 //Login
 const setCookie = function (req, res) {
@@ -18,20 +17,15 @@ const setCookie = function (req, res) {
         User.findOne({ login: login }, function (err, doc) {
             if (!doc) {
                 res.status(httpStatus.UNAUTHORIZED).send('Wrong user, try /login again');
-            } else if (!checkPasswordForUser(doc, password)) {
-                res.status(httpStatus.UNAUTHORIZED).send('Wrong password, try /login again');
-            } else {
+            } else if (doc.validPassword(password)) {
                 res.cookie(cookieName, login);
                 res.status(httpStatus.PERMANENT_REDIRECT).redirect('/posts');
+            } else {
+                res.status(httpStatus.UNAUTHORIZED).send('Wrong password, try /login again');
             }
         });
-
     }
 };
-
-const checkPasswordForUser = function (user, password) {
-    return user.password === crypto.pbkdf2Sync(password, saltRounds, 1000, 64, hashAlg).toString(`hex`);
-}
 
 //Logout
 const deleteCookie = function (req, res) {

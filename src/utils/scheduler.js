@@ -1,5 +1,5 @@
 const { CronJob } = require('cron');
-schedulerFrequency = '* * * * * *';
+schedulerFrequency = require(`../config.js`).freq;
 
 module.exports.scheduleTask = (sheduledTask) => {
     try {
