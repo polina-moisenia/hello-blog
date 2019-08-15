@@ -1,5 +1,4 @@
 const fs = require('fs');
-const path = require('path');
 const uuid = require('uuid');
 const httpStatus = require('http-status');
 const { commentsDataLocation } = require('../config.js');
