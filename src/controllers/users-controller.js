@@ -2,15 +2,16 @@ const httpStatus = require('http-status');
 const User = require('../models/User.js');
 const { getGravatarProfile } = require('../utils/gravatar-loader.js');
 
-const getUsers = function (req, res) {
-  User.find({}, (err, docs) => res.json(docs)).select('-_id -password');
+const getUsers = function (req, res, next) {
+  User.find({}, (err, docs) => {
+    if (err) return next(err);
+    return res.json(docs);
+  }).select('-_id -password');
 }
 
-const getUserById = async function (req, res) {
+const getUserById = async function (req, res, next) {
   try {
-    //TODO try cath looks fine?
     const doc = await User.findOne({ userId: req.params.id }, function (err, doc) {
-      if (err) return console.log(err);
       return doc;
     }).select('-_id -password');
 
@@ -22,14 +23,14 @@ const getUserById = async function (req, res) {
     }
   }
   catch (err) {
-    //TODO code doublling
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).send(`Something broke! More info : ${err}`);
+    return next(err);
   }
 };
 
-const updateUser = function (req, res) {
+const updateUser = function (req, res, next) {
   const userUpdated = req.body;
   User.findOne({ userId: req.params.id }, function (err, doc) {
+    if (err) return next(err);
     if (!doc) return res.status(httpStatus.NOT_FOUND).send('User was not found');
 
     doc.name = userUpdated.name;
@@ -41,8 +42,9 @@ const updateUser = function (req, res) {
   });
 }
 
-const deleteUser = function (req, res) {
+const deleteUser = function (req, res, next) {
   User.findOneAndRemove({ userId: req.params.id }, function (err, doc) {
+    if (err) return next(err);
     if (!doc) res.status(httpStatus.NOT_FOUND).send('User was not found');
     res.status(httpStatus.OK).send('User was deleted');
   });

@@ -3,7 +3,7 @@ const User = require('../models/User.js');
 const cookieName = process.env.cookieName;
 
 //Login
-const setCookie = function (req, res) {
+const setCookie = function (req, res, next) {
     const cookie = req.cookies[cookieName];
     if (cookie) {
         res.status(httpStatus.PERMANENT_REDIRECT).redirect('/posts');
@@ -15,6 +15,7 @@ const setCookie = function (req, res) {
         }
 
         User.findOne({ login: login }, function (err, doc) {
+            if (err) return next(err);
             if (!doc) {
                 res.status(httpStatus.UNAUTHORIZED).send('Wrong user, try /login again');
             } else if (doc.validPassword(password)) {

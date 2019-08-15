@@ -1,5 +1,5 @@
 const path = require('path');
-const httpStatus= require('http-status');
+const httpStatus = require('http-status');
 const User = require('../models/User.js');
 const auth = require(path.join(__dirname, '../utils/auth.js'));
 const cookieName = require('../config.js').cookieName;
@@ -11,8 +11,9 @@ const authorizeByCookie = function (rule) {
         if (cookie) {
             const login = cookie;
             User.findOne({ login: login }, function (err, doc) {
+                if (err) return next(err);
                 return auth.canUser(rule, doc) ? next() : res.status(401).send('No permission to procced for this user, try /login with another one');
-            });            
+            });
         } else {
             res.status(httpStatus.UNAUTHORIZED).send('User must be logged in, try /login');
         }
