@@ -2,22 +2,19 @@ const fs = require('fs');
 const uuid = require('uuid');
 const httpStatus = require('http-status');
 const { postsDataLocation } = require('../config.js');
-const postsCollection = JSON.parse(fs.readFileSync(postsDataLocation, 'utf8'));
+const { createPostInCollection } = require('../utils/post-util.js');
+var postsCollection = JSON.parse(fs.readFileSync(postsDataLocation, 'utf8'));
 
 const getPosts = function (req, res) {
-  res.json(postsCollection);
+  res.json(JSON.parse(fs.readFileSync(postsDataLocation, 'utf8')));
 };
 
 const createPost = function (req, res) {
   const post = req.body;
   //TODO rewrite validation
-  if (!post || !post.authorId || !post.title || !post.summary) res.status(httpStatus.BAD_REQUEST).send('Bad request');
+  if (!post || !post.title || !post.summary) res.status(httpStatus.BAD_REQUEST).send('Bad request');
 
-  post.postId = uuid.v4();
-  post.createdAt = new Date().toISOString();
-
-  postsCollection.push(post);
-  fs.writeFileSync(postsDataLocation, JSON.stringify(postsCollection));
+  createPostInCollection(post);
   res.status(httpStatus.CREATED).send(`Post was created, id = ${post.postId}`);
 };
 

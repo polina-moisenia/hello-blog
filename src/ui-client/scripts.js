@@ -1,25 +1,20 @@
 const socket = io('http://localhost:5000')
 
-// setEventListener('message-form', 'submit', () => {
-//   var postCreated = {
-//     title : getValueById('title'),
-//     message : getValueById('message')
-//   };
-//   //TODO get from cookies
-//   //postCreated['authorEmail'] = getValueById('authorEmail');
-//   socket.emit('newPostCreated', JSON.stringify(postCreated));
-// })
-
 socket.on('messageToClient', (msg) => {
   console.log(msg)
-  socket.emit('messageToServer', 'hello from client')
+  socket.emit('messageToServer', 'Web sockets are ready on client side')
 })
 
 setEventListener('message-form', 'submit', () => {
-  socket.emit('newMessageFromClient', {text: getValueById('message')})
+  var postCreated = {
+         title : getValueById('title'),
+         summary : getValueById('summary')
+       };
+
+  socket.emit('newPostCreatedOnClient', JSON.stringify(postCreated))
 })
 
-socket.on('newMessageToClient', ({text}) => {
-  console.log(text)
-  addMessage('posts', text)
+socket.on('newPostCreatedOnApi', (newPost) => {
+  console.log(newPost)
+  addMessage('posts', newPost)
 })

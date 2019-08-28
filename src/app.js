@@ -72,11 +72,14 @@ const expressServer = app.listen(app.get('port'), function () {
 
 const io = socketio(expressServer)
 
-// Simple chat
+const { createPostInCollection } = require('./utils/post-util.js');
+
 io.on('connection', (socket) => {
-  socket.emit('messageToClient', {text: 'hello from server'})
+  socket.emit('messageToClient', 'Web sockets are ready on api side')
   socket.on('messageToServer', console.log)
-  socket.on('newMessageFromClient', msg => {
-    io.emit('newMessageToClient', msg)
+  socket.on('newPostCreatedOnClient', post => {
+    createPostInCollection(JSON.parse(post));
+    console.log(post);
+    io.emit('newPostCreatedOnApi', post);
   })
 })
