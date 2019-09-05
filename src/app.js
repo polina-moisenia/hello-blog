@@ -78,8 +78,7 @@ io.on('connection', (socket) => {
   socket.emit('messageToClient', 'Web sockets are ready on api side')
   socket.on('messageToServer', console.log)
   socket.on('newPostCreatedOnClient', post => {
-    createPostInCollection(JSON.parse(post));
-    console.log(post);
-    io.emit('newPostCreatedOnApi', post);
+    const postCreated = createPostInCollection(JSON.parse(post));
+    io.emit('newPostCreatedOnApi', postCreated);
   })
 })

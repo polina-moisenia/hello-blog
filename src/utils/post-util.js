@@ -8,7 +8,9 @@ const createPostInCollection = function (post) {
     post.postId = uuid.v4();
     post.createdAt = new Date().toISOString();
     postsCollection.push(post);
-    fs.writeFileSync(postsDataLocation, JSON.stringify(postsCollection));   
+    fs.writeFileSync(postsDataLocation, JSON.stringify(postsCollection)); 
+    
+    return post;
 };
 
 module.exports = {
