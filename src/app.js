@@ -72,11 +72,14 @@ const expressServer = app.listen(app.get('port'), function () {
 
 const io = socketio(expressServer)
 
-const { createPostInCollection } = require('./utils/post-util.js');
+const { getAllPostsFromCollection, createPostInCollection } = require('./utils/post-util.js');
 
 io.on('connection', (socket) => {
-  socket.emit('messageToClient', 'Web sockets are ready on api side')
+
+  var posts = getAllPostsFromCollection();
+  socket.emit('messageToClient', JSON.stringify(posts));
   socket.on('messageToServer', console.log)
+
   socket.on('newPostCreatedOnClient', post => {
     const postCreated = createPostInCollection(JSON.parse(post));
     io.emit('newPostCreatedOnApi', postCreated);
