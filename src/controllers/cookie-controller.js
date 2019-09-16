@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const User = require('../models/User.js');
-const cookieName = process.env.cookieName;
+const cookieName = require('../config.js').cookieName;
 
 //Login
 const setCookie = function (req, res, next) {
