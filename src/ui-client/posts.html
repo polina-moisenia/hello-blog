@@ -5,32 +5,28 @@
 <link rel="stylesheet" href="./styles.css">
 <div class="container">
     <a>Posts</a>
-    <div class="info">
-        <!-- Get the email from the cookies -->
-        <a>Logged in as</a>
-    </div>
-
-    <div class="tab-content">
-        <div id="posts-panel" class="tab-pane fade in active">
-            <div class="row">
-                <div class="col-sm-12">
-                    <form action="" id="message-form">
-                        <div class="col-sm-10">
-                            <input type="text" id="title"/>
-                        </div>
-                        <div class="col-sm-10">
-                            <input type="text" id="summary"/>
-                        </div>
-                        <div class="col-sm-2">
-                            <input class="btn btn-primary" type="submit" value="send"/>
-                        </div>
-                    </form>
-                    <ul id="posts" class="col-sm-10">
-                        
-                    </ul>
+    <div>Please add a new post</div>
+    <div id="posts-panel" class="tab-pane fade in active">
+        <div class="col-sm-12">
+            <form action="" id="message-form">
+                <div class="col-sm-10">
+                    <input type="text" id="email" value="Type your email here" />
                 </div>
-            </div>
+                <div class="col-sm-10">
+                    <input type="text" id="title" value="Type title here" />
+                </div>
+                <div class="col-sm-10">
+                    <input type="text" id="summary" value="Type summary here" />
+                </div>
+                <div class="col-sm-2">
+                    <input class="btn btn-primary" type="submit" value="send" />
+                </div>
+            </form>
         </div>
+        <div>All posts:</div>
+        <ul id="posts" class="col-sm-10">
+
+        </ul>
     </div>
 </div>
 

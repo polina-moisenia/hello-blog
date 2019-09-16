@@ -15,6 +15,7 @@ const postsController = require(path.join(__dirname, './controllers/posts-contro
 const commentsController = require(path.join(__dirname, './controllers/comments-controller.js'));
 const userController = require(path.join(__dirname, './controllers/users-controller.js'));
 const statisticsController = require(path.join(__dirname, './controllers/statistics-controller.js'));
+const posts = require('./utils/posts.js');
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
 connectMongoDB();
@@ -71,17 +72,13 @@ const expressServer = app.listen(app.get('port'), function () {
 });
 
 const io = socketio(expressServer)
-
-const { getAllPostsFromCollection, createPostInCollection } = require('./utils/post-util.js');
-
 io.on('connection', (socket) => {
 
-  var posts = getAllPostsFromCollection();
-  socket.emit('messageToClient', JSON.stringify(posts));
-  socket.on('messageToServer', console.log)
+  socket.emit('messageToClient', JSON.stringify(posts.getAllPostsFromCollection()));
+  socket.on('messageToServer', console.log);
 
   socket.on('newPostCreatedOnClient', post => {
-    const postCreated = createPostInCollection(JSON.parse(post));
+    const postCreated = posts.createPostInCollection(JSON.parse(post));
     io.emit('newPostCreatedOnApi', postCreated);
   })
 })

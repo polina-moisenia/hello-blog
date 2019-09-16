@@ -3,3 +3,8 @@ input {
     height: 35px;
     margin: 5px;
 }
+
+textarea {
+    width: 100%;
+    height: auto;
+}

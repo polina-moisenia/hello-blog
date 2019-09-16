@@ -2,28 +2,28 @@
 	{
 		"commentId" : "e8e20b7f-95cf-4fef-a7e9-92126da06232",
 		"postId" : "aff47195-5ff8-4501-b3de-eb5c4ee1949e",
-		"authorId" : "81f48b9f-5cbe-4ae1-85fb-5f539f8b6de7",
+		"authorEmail" : "help@gmail.com",
 		"createdAt" : "2019-06-14T011:55:43.511Z",
 		"summary" : "Updates on the schedule will be provided soon"
 	},
 	{
 		"commentId" : "4cd3abf9-ab24-4d37-a0c9-0b4d1cd069c1",
 		"postId" : "2093eb86-f1b8-40d8-bca5-74312d0b284d",
-		"authorId" : "7e530f8f-0744-4281-a429-09537a79472b",
+		"authorEmail" : "student2@gmail.com",
 		"createdAt" : "2019-06-20T23:12:43.511Z",
 		"summary" : "Me too!! Let's pair on the tasks"
 	},
 	{
 		"commentId" : "cca7189b-76f8-4bd2-851d-727657921a4b",
 		"postId" : "a57cf767-92d9-4b12-bfe7-2b1edb19d1b4",
-		"authorId" : "7e530f8f-0744-4281-a429-09537a79472b",
+		"authorEmail" : "student2@gmail.com",
 		"createdAt" : "2019-06-30T23:38:43.511Z",
 		"summary" : "Okaaaay, let's try"
 	},
 	{
 		"commentId" : "62499079-d326-4faa-8192-da12629bf737",
 		"postId" : "a57cf767-92d9-4b12-bfe7-2b1edb19d1b4",
-		"authorId" : "2f44f1a5-f876-4ecc-b85f-b39bac827cfc",
+		"authorEmail" : "student1@gmail.com",
 		"createdAt" : "2019-07-01T07:34:43.511Z",
 		"summary" : "Guys, that sucks. But what can we do, meet you all on Tuesday then"
 	}

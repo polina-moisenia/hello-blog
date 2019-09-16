@@ -1,17 +1,19 @@
 const addPost = (domID, post) => {
   document.getElementById(domID).innerHTML += `
   <li>
+  <div class="post-repres">
     <form action="" id="post-created-form">
-      <div>Post author: {}, id: ${post.postId}, created at ${post.createdAt}</div>
+      <div class="col-sm-12">Post author: ${post.authorEmail}, created at ${post.createdAt}</div>
       <div class="col-sm-10">
-        <input type="text" id="title-created-${post.number}" value=${post.title}"/>
-        <input type="text" id="summary-created-${post.number}" value=${post.summary}/>
+        <input type="text" id="title-created" value="${post.title}""/>
+        <textarea type="text" id="summary-created"/>${post.summary}</textarea>
       </div>
       <div class="col-sm-2">
         <input class="btn btn-primary" type="edit" value="edit"/>
         <input class="btn btn-primary" type="delete" value="delete"/>
       </div>
     </form>
+  </div>
   </li>`;
 }
 

@@ -11,7 +11,7 @@ const getCommentsByPostId = function (req, res) {
 const createComment = function (req, res) {
   const comment = req.body;
   //TODO rewrite validation
-  if (!comment || !comment.summary || !comment.authorId) res.status(httpStatus.BAD_REQUEST).send('Bad request');
+  if (!comment || !comment.summary || !comment.authorEmail) res.status(httpStatus.BAD_REQUEST).send('Bad request');
 
   comment.postId = req.postId;
   comment.commentId = uuid.v4();
