@@ -4,10 +4,10 @@ module.exports = function (posts) {
         const diffTime = Math.abs(today - Date.parse(item.createdAt));
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-        if (diffDays <= 1) { result.perDay++; }
-        if (diffDays <= 7) { result.perWeek++; }
-        if (diffDays <= 30) { result.perMonth++; }
+        if (diffDays <= 1) { result.postsPerDay++; }
+        if (diffDays <= 7) { result.postsPerWeek++; }
+        if (diffDays <= 30) { result.postsPerMonth++; }
 
         return result;
-    }, { perDay: 0, perWeek: 0, perMonth: 0 });
+    }, { postsPerDay: 0, postsPerWeek: 0, postsPerMonth: 0 });
 }
