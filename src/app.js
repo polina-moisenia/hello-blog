@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
+const socketio = require('socket.io');
 const connectMongoDB = require ("./utils/mongo-connection.js");
 const swaggerDocument = YAML.load(path.join(__dirname, '../swagger.yaml'));
 const { setCookie, deleteCookie } = require(path.join(__dirname, './controllers/cookie-controller.js'));
@@ -14,6 +15,7 @@ const postsController = require(path.join(__dirname, './controllers/posts-contro
 const commentsController = require(path.join(__dirname, './controllers/comments-controller.js'));
 const userController = require(path.join(__dirname, './controllers/users-controller.js'));
 const statisticsController = require(path.join(__dirname, './controllers/statistics-controller.js'));
+const posts = require('./utils/posts.js');
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
 connectMongoDB();
@@ -54,6 +56,8 @@ app.use('/users',
     .put('/:id', authorizeByCookie('ADD_USERS'), userController.updateUser)
     .delete('/:id', authorizeByCookie('DELETE_USERS'), userController.deleteUser));
 
+app.use(express.static(__dirname + '/ui-client'))
+
 app.use(function (req, res, next) {
   res.status(404).send('Sorry, can\'t find that endpoint!');
 });
@@ -63,6 +67,18 @@ app.use(function (err, req, res, next) {
   res.status(500).send(`Something broke! More info : ${err}`);
 })
 
-app.listen(app.get('port'), function () {
+const expressServer = app.listen(app.get('port'), function () {
   console.log(`Node app is running at localhost: ${app.get('port')}`);
 });
+
+const io = socketio(expressServer)
+io.on('connection', (socket) => {
+
+  socket.emit('messageToClient', JSON.stringify(posts.getAllPostsFromCollection()));
+  socket.on('messageToServer', console.log);
+
+  socket.on('newPostCreatedOnClient', post => {
+    const postCreated = posts.createPostInCollection(JSON.parse(post));
+    io.emit('newPostCreatedOnApi', postCreated);
+  })
+})

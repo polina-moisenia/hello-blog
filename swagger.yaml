@@ -49,7 +49,7 @@ paths:
           type: object
           description: Post entity
           properties:
-            authorId:
+            authorEmail:
               type: string
             title:
               type: string
@@ -187,7 +187,7 @@ paths:
           type: object
           description: Comment description
           properties:
-            authorId:
+            authorEmail:
               type: string
             summary:
               type: string
@@ -440,7 +440,7 @@ definitions:
    properties:
     postId:
       type: string
-    authorId:
+    authorEmail:
       type: string
     title:
       type: string
@@ -467,7 +467,7 @@ definitions:
       type: string
     postId:
       type: string
-    authorId:
+    authorEmail:
       type: string
     createdAt:
       format: date-time
